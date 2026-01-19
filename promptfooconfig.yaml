@@ -1,0 +1,73 @@
+description: "LLM Validator Evals"
+
+prompts: 
+  - "Run Validation"
+
+providers:
+  - id: "echo"
+
+tests:
+  # --- VALID FILES ---
+  - description: "Valid User (Aarav)"
+    provider:
+      id: "exec:python validate_user.py tests/valid.json"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).is_valid === true"
+
+  # --- ERROR FILES ---
+  - description: "Invalid: USA (3 chars) and Negative Age"
+    provider:
+      id: "exec:python validate_user.py tests/test_all_errors.json"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).is_valid === false"
+      - type: contains
+        value: "Age must be positive"
+      - type: contains
+        value: "Country must be a valid ISO-2 code"
+
+  - description: "Invalid: Bad Email and Country Name"
+    provider:
+      id: "exec:python validate_user.py tests/invalid.json"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).is_valid === false"
+      - type: contains
+        value: "Invalid email format"
+
+  - description: "Invalid: Missing Fields"
+    provider:
+      id: "exec:python validate_user.py tests/test_missing_fields.json"
+    assert:
+      - type: javascript
+        # Missing required fields like phone/age makes it invalid
+        value: "JSON.parse(output).is_valid === false" 
+
+  # --- WARNING FILES (Should be VALID) ---
+  - description: "Warning: Disposable Email"
+    provider:
+      id: "exec:python validate_user.py tests/test_email_disposable.json"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).is_valid === true"
+      - type: contains
+        value: "Disposable email"
+
+  - description: "Warning: Phone Mismatch (US vs +91)"
+    provider:
+      id: "exec:python validate_user.py tests/test_simple_mismatch.json"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).is_valid === true"
+      - type: contains
+        value: "mismatch"
+
+  - description: "Warning: Phone Mismatch (Raj Kumar)"
+    provider:
+      id: "exec:python validate_user.py tests/test_phone_mismatch.json"
+    assert:
+      - type: javascript
+        value: "JSON.parse(output).is_valid === true"
+      - type: contains
+        value: "mismatch"
