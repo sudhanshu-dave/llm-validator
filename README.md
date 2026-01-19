@@ -45,6 +45,8 @@ A Python-based data validation script that uses an LLM (OpenAI GPT-4o-mini) to v
   python validate_user.py tests/valid.json
 
 ## Example Input (tests/valid.json):
+   - valid.json
+   ```bash
    {
   "name": "Aarav Patel",
   "email": "aarav.patel@gmail.com",
@@ -54,7 +56,8 @@ A Python-based data validation script that uses an LLM (OpenAI GPT-4o-mini) to v
   }
 
 ## Example Output:
-   
+   - Output
+   ```bash
    {
   "is_valid": true,
   "errors": [],
