@@ -47,22 +47,22 @@ A Python-based data validation script that uses an LLM (OpenAI GPT-4o-mini) to v
 ## Example Input (tests/valid.json):
    - valid.json
      ```bash
-  {
-  "name": "Aarav Patel",
-  "email": "aarav.patel@gmail.com",
-  "age": 24,
-  "country": "IN",
-  "phone": "+919876543210"
-  }
+     {
+        "name": "Aarav Patel",
+        "email": "aarav.patel@gmail.com",
+        "age": 24,
+        "country": "IN",
+        "phone": "+919876543210"
+        }
 
 ## Example Output:
    - Output
      ```bash
-   {
-  "is_valid": true,
-  "errors": [],
-  "warnings": []
-  }
+     {
+        "is_valid": true,
+        "errors": [],
+        "warnings": []
+        }
 
 ## Running Evaluations
    This project uses Promptfoo to ensure the LLM strictly adheres to the schema and logic rules. The evaluation suite tests valid inputs, invalid inputs (errors), and edge cases (warnings).
