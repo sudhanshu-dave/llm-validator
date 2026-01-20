@@ -6,10 +6,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
 
-# Load environment variables
 load_dotenv()
 
-# Initialize OpenAI Client
 if not os.getenv("OPENAI_API_KEY"):
     print(json.dumps({
         "is_valid": False, 
@@ -20,23 +18,16 @@ if not os.getenv("OPENAI_API_KEY"):
 
 client = OpenAI()
 
-# ---------------------------------------------------------
-# 1. Define the Strict Output Schema
-# ---------------------------------------------------------
 class ValidationResponse(BaseModel):
     is_valid: bool
     errors: List[str]
     warnings: List[str]
 
-# ---------------------------------------------------------
-# 2. Define the Validation Logic
-# ---------------------------------------------------------
 def validate_user_profile(user_data: dict) -> ValidationResponse:
     """
     Validates user data using ONLY the LLM, strictly following the assignment rules.
     """
     
-    # SYSTEM PROMPT: Updated to fix boundary conditions (Age 18) and specific messaging.
     system_prompt = """
     You are a strict data validation assistant. Analyze the input JSON and output a structured response.
 
@@ -93,10 +84,7 @@ def validate_user_profile(user_data: dict) -> ValidationResponse:
             errors=[f"System Error: Failed to validate input. {str(e)}"], 
             warnings=[]
         )
-
-# ---------------------------------------------------------
-# 3. Main Execution
-# ---------------------------------------------------------
+    
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(json.dumps({
